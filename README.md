@@ -5,7 +5,6 @@ AWSの3層Web基盤（ALB / EC2 Auto Scaling / RDS）をTerraformで**自分で�
 当初はテンプレートを元に始めましたが、中身を読み取れなかったため、
 基礎から1ステップずつ自作する方針に切り替えました。
 元のテンプレートは `template-original` ブランチに保存しています（参照用）。
-評価用の成果物は [aws-iac-portfolio-terraform](リンク) にまとめています。
 
 ## 目標とする構成
 - ネットワーク: 2AZ、public / app / data の3層サブネット、NAT Gateway
