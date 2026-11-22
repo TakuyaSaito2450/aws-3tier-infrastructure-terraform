@@ -176,3 +176,28 @@ resource "aws_route_table_association" "private_db2" {
   subnet_id      = aws_subnet.private_db2.id
   route_table_id = aws_route_table.private.id
 }
+
+resource "aws_security_group" "alb" {
+  name        = "security_groupx_alb"
+  description = "Allow HTTP"
+  vpc_id      = aws_vpc.main.id
+
+  ingress {
+    description = ""
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.1.0/24"]
+  }
+
+  tags = {
+    Name = "security_groupx_alb"
+  }
+}
