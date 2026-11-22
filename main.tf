@@ -178,7 +178,7 @@ resource "aws_route_table_association" "private_db2" {
 }
 
 resource "aws_security_group" "alb" {
-  name        = "security_group_alb"
+  name        = "security-group-alb"
   description = "Allow HTTP"
   vpc_id      = aws_vpc.main.id
 
@@ -191,10 +191,11 @@ resource "aws_security_group" "alb" {
   }
 
   egress {
+    description = "HTTP from the EC2"
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = ["10.0.3.0/24","10.0.4.0/24"]
+    cidr_blocks = ["10.0.3.0/24", "10.0.4.0/24"]
   }
 
   tags = {
