@@ -177,6 +177,9 @@ resource "aws_route_table_association" "private_db2" {
   route_table_id = aws_route_table.private.id
 }
 
+# ------------------------------------------------------------
+# ALB
+# ------------------------------------------------------------
 resource "aws_security_group" "alb" {
   name        = "security-group-alb"
   description = "Allow HTTP"
@@ -191,7 +194,7 @@ resource "aws_security_group" "alb" {
   }
 
   egress {
-    description = "HTTP from the EC2"
+    description = "HTTP to the app instances"
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
@@ -199,6 +202,17 @@ resource "aws_security_group" "alb" {
   }
 
   tags = {
-    Name = "security_group_alb"
+    Name = "security-group-alb"
   }
+}
+
+# ------------------------------------------------------------
+# Target Group
+# ------------------------------------------------------------
+resource "aws_lb_target_group" "http" {
+  name        = "tf-example-lb-alb-tg"
+  target_type = "alb"
+  port        = 80
+  protocol    = "HTTP"
+  vpc_id      = aws_vpc.main.id
 }
