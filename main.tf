@@ -214,4 +214,28 @@ resource "aws_lb_target_group" "http" {
   port     = 80
   protocol = "HTTP"
   vpc_id   = aws_vpc.main.id
+
+  health_check {
+    enabled             = true
+    path                = "/health"      # ヘルスチェック先のパス
+    protocol            = "HTTP"         # HTTP または HTTPS
+    port                = "traffic-port" # トラフィックと同じポートを使う場合は "traffic-port"
+    matcher             = "200"          # 正常とみなすHTTPステータスコード（"200-299"なども可）
+    interval            = 30             # チェック間隔（秒）
+    timeout             = 5              # タイムアウト（秒）
+    healthy_threshold   = 3              # 正常とみなすまでの連続成功回数
+    unhealthy_threshold = 2              # 異常とみなすまでの連続失敗回数
+  }
+}
+
+resource "aws_lb" "main" {
+  name               = "aws-lb"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.alb.id]
+  subnets            = [aws_subnet.public1.id, aws_subnet.public2.id]
+
+  tags = {
+    Name = "lb"
+  }
 }
